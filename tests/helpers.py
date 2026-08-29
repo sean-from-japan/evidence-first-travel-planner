@@ -12,7 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def example_data() -> Dict[str, Any]:
     return json.loads(
-        (ROOT / "examples" / "fictional_trip.json").read_text(encoding="utf-8")
+        (ROOT / "src" / "evidence_travel" / "data" / "fictional_trip.json").read_text(
+            encoding="utf-8"
+        )
     )
 
 

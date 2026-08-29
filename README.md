@@ -21,7 +21,7 @@ python -m pip install -e .
 evidence-travel demo --output-dir build/demo
 ```
 
-The fixture deliberately contains valid decisions and contradictions, so the command exits with code `2` and writes:
+The committed [fictional fixture](src/evidence_travel/data/fictional_trip.json) deliberately contains valid decisions and contradictions, so the command exits with code `2` and writes:
 
 - `build/demo/report.md` — recruiter-readable explanations;
 - `build/demo/report.html` — a dependency-free responsive timeline;
@@ -128,4 +128,3 @@ The repository audit scans both the working tree and Git blobs for likely secret
 ## License
 
 All repository code, fixtures, diagrams, and prose were newly authored for this project. They are available under the [MIT License](LICENSE).
-

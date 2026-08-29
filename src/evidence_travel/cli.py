@@ -62,10 +62,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     try:
         if args.command == "validate":
             return _validate_file(args.input, args.markdown, args.html, args.json_path)
-        root = Path(__file__).resolve().parents[2]
+        fixture = Path(__file__).with_name("data") / "fictional_trip.json"
         output = args.output_dir
         return _validate_file(
-            root / "examples" / "fictional_trip.json",
+            fixture,
             output / "report.md",
             output / "report.html",
             output / "summary.json",

@@ -26,7 +26,7 @@ def test_cli_subprocess_has_stable_findings_exit_code(tmp_path):
             "-m",
             "evidence_travel",
             "validate",
-            str(ROOT / "examples" / "fictional_trip.json"),
+            str(ROOT / "src" / "evidence_travel" / "data" / "fictional_trip.json"),
             "--markdown",
             str(output),
         ],

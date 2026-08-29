@@ -52,6 +52,25 @@ EXCLUDED_DIRS = {
 
 
 def tracked_files(root: Path) -> Iterator[Tuple[str, bytes]]:
+    if (root / ".git").exists():
+        output = subprocess.run(
+            ["git", "ls-files", "-co", "--exclude-standard", "-z"],
+            cwd=root,
+            check=True,
+            capture_output=True,
+        ).stdout
+        for raw_path in sorted(output.split(b"\0")):
+            if not raw_path:
+                continue
+            relative = Path(raw_path.decode("utf-8"))
+            if not (root / relative).is_file():
+                continue
+            if (
+                relative.suffix.lower() in TEXT_SUFFIXES
+                or relative.name in TEXT_SUFFIXES
+            ):
+                yield str(relative), (root / relative).read_bytes()
+        return
     for path in sorted(root.rglob("*")):
         relative = path.relative_to(root)
         ignored = any(
