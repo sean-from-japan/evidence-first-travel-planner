@@ -14,7 +14,7 @@ This software was built **after** that travel. It did not power the historical t
 
 ## Run the demo
 
-Python 3.9 or newer is supported. The runtime has no third-party dependencies and the demo performs no network access.
+Python 3.9 or newer is supported. The demo performs no network access. Unix-like systems use their IANA time-zone database; Windows installs the pinned `tzdata` fallback required by `zoneinfo`.
 
 ```bash
 python -m pip install -e .
@@ -89,7 +89,7 @@ See [architecture and rule semantics](docs/architecture.md) for interval and tra
 
 ## Engineering decisions
 
-- **Standard library at runtime:** installation and the committed demo remain small and offline. A validation library could enforce more JSON Schema keywords, but the core loader intentionally checks the invariants it consumes while publishing the complete interchange schema separately.
+- **Standard-library core:** installation and the committed demo remain small and offline. Windows uses the official `tzdata` package because the operating system does not ship an IANA database. A validation library could enforce more JSON Schema keywords, but the core loader intentionally checks the invariants it consumes while publishing the complete interchange schema separately.
 - **Immutable findings:** rules return sorted values, which keeps reports and automation stable.
 - **Explain, do not auto-repair:** choosing between conflicting sources or changing a booking is a human decision.
 - **Straight-line lower bound:** geographic validation catches impossible declarations without pretending to provide live routing.

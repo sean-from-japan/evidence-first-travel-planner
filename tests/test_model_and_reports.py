@@ -27,6 +27,11 @@ def test_schema_document_is_parseable_and_declares_all_sections():
     }
 
 
+def test_windows_timezone_fallback_is_pinned():
+    project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert "tzdata==2026.3; platform_system == 'Windows'" in project
+
+
 def test_duplicate_ids_are_rejected(tmp_path):
     data = example_data()
     data["places"].append(dict(data["places"][0]))
