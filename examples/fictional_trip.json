@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0",
+  "metadata": {
+    "title": "Alderhaven evidence review",
+    "timezone": "Europe/Paris",
+    "planning_as_of": "2032-05-01T12:00:00+02:00"
+  },
+  "sources": [
+    {
+      "id": "src_city_museum",
+      "reference": "Alderhaven Museum visitor bulletin",
+      "url": "https://museum.example.com/visit",
+      "publisher": "fictional venue",
+      "type": "official",
+      "checked_at": "2032-04-25T09:00:00+02:00",
+      "freshness_days": 30,
+      "verification_status": "verified",
+      "confidence": "high",
+      "facts": [
+        {"subject": "northstar_museum", "field": "closes", "value": "18:00"}
+      ]
+    },
+    {
+      "id": "src_city_directory",
+      "reference": "Alderhaven community directory",
+      "url": "https://directory.example.org/museum",
+      "publisher": "fictional directory",
+      "type": "secondary",
+      "checked_at": "2032-04-28T12:00:00+02:00",
+      "freshness_days": 30,
+      "verification_status": "needs_resolution",
+      "confidence": "medium",
+      "facts": [
+        {"subject": "northstar_museum", "field": "closes", "value": "17:00"}
+      ]
+    },
+    {
+      "id": "src_ferry_notice",
+      "reference": "Glassbay ferry service notice",
+      "url": "https://ferry.example.net/notices/spring",
+      "publisher": "fictional operator",
+      "type": "official",
+      "checked_at": "2032-03-01T08:00:00+01:00",
+      "freshness_days": 14,
+      "verification_status": "verified",
+      "confidence": "high",
+      "facts": []
+    },
+    {
+      "id": "src_route_snapshot",
+      "reference": "Synthetic route adapter snapshot",
+      "publisher": "generated fixture",
+      "type": "route_adapter",
+      "checked_at": "2032-04-30T18:00:00+02:00",
+      "freshness_days": 7,
+      "verification_status": "verified",
+      "confidence": "high",
+      "facts": []
+    }
+  ],
+  "places": [
+    {"id": "place_harbor", "name": "Alderhaven Terminal", "lat": 50.0000, "lon": 10.0000},
+    {"id": "place_museum", "name": "Northstar Museum", "lat": 50.0100, "lon": 10.0100},
+    {"id": "place_ridge", "name": "Glassbay Observatory", "lat": 50.0800, "lon": 10.1000}
+  ],
+  "activities": [
+    {
+      "id": "activity_arrival",
+      "name": "Arrival and orientation",
+      "place_id": "place_harbor",
+      "start": "2032-05-03T08:00:00+02:00",
+      "end": "2032-05-03T08:20:00+02:00",
+      "required": true,
+      "booking_required": false,
+      "fragile": false,
+      "source_ids": ["src_ferry_notice"]
+    },
+    {
+      "id": "activity_museum",
+      "name": "Northstar galleries",
+      "place_id": "place_museum",
+      "start": "2032-05-03T09:00:00+02:00",
+      "end": "2032-05-03T10:00:00+02:00",
+      "required": true,
+      "booking_required": true,
+      "reservation_id": "reservation_museum",
+      "fragile": false,
+      "opening_windows": [
+        {"days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], "opens": "10:00", "closes": "18:00"}
+      ],
+      "closures": [],
+      "source_ids": ["src_city_museum", "src_city_directory"]
+    },
+    {
+      "id": "activity_workshop",
+      "name": "Map-printing workshop",
+      "place_id": "place_museum",
+      "start": "2032-05-03T09:30:00+02:00",
+      "end": "2032-05-03T10:30:00+02:00",
+      "required": false,
+      "booking_required": true,
+      "reservation_id": "reservation_workshop",
+      "fragile": false,
+      "source_ids": ["src_city_museum"]
+    },
+    {
+      "id": "activity_observatory",
+      "name": "Glassbay sky platform",
+      "place_id": "place_ridge",
+      "start": "2032-05-03T10:45:00+02:00",
+      "end": "2032-05-03T11:30:00+02:00",
+      "required": true,
+      "booking_required": false,
+      "fragile": true,
+      "source_ids": ["src_route_snapshot", "src_unlisted_weather"]
+    },
+    {
+      "id": "activity_evening_walk",
+      "name": "Harbor light walk",
+      "place_id": "place_harbor",
+      "start": "2032-05-03T20:00:00+02:00",
+      "end": "2032-05-03T21:00:00+02:00",
+      "required": false,
+      "booking_required": false,
+      "fragile": true,
+      "fallback_plan_id": "fallback_arcade",
+      "source_ids": ["src_city_directory"]
+    }
+  ],
+  "reservations": [
+    {
+      "id": "reservation_museum",
+      "activity_id": "activity_museum",
+      "start": "2032-05-03T09:00:00+02:00",
+      "end": "2032-05-03T10:00:00+02:00",
+      "booked": false,
+      "deadline": "2032-05-02T18:00:00+02:00",
+      "cancellation_constraints": "Synthetic fixture: non-refundable after the deadline.",
+      "source_ids": ["src_city_museum"]
+    },
+    {
+      "id": "reservation_workshop",
+      "activity_id": "activity_workshop",
+      "start": "2032-05-03T09:30:00+02:00",
+      "end": "2032-05-03T10:30:00+02:00",
+      "booked": true,
+      "deadline": "2032-05-02T12:00:00+02:00",
+      "cancellation_constraints": "Synthetic fixture: changes allowed until noon.",
+      "source_ids": ["src_city_museum"]
+    },
+    {
+      "id": "reservation_boat",
+      "activity_id": "activity_arrival",
+      "start": "2032-05-03T10:00:00+02:00",
+      "end": "2032-05-03T11:00:00+02:00",
+      "booked": true,
+      "deadline": "2032-05-01T12:00:00+02:00",
+      "cancellation_constraints": "Synthetic fixture: no changes.",
+      "source_ids": ["src_ferry_notice"]
+    }
+  ],
+  "transfers": [
+    {
+      "id": "transfer_museum_to_ridge",
+      "from_activity_id": "activity_museum",
+      "to_activity_id": "activity_observatory",
+      "depart_after": "2032-05-03T10:00:00+02:00",
+      "arrive_by": "2032-05-03T10:45:00+02:00",
+      "duration_minutes": 55,
+      "minimum_connection_minutes": 15,
+      "distance_km": 1.0,
+      "mode": "shuttle",
+      "source_ids": ["src_route_snapshot"]
+    }
+  ],
+  "fallback_plans": [
+    {
+      "id": "fallback_arcade",
+      "for_activity_id": "activity_evening_walk",
+      "activation_condition": "Activate when the fictional weather bulletin marks the harbor unsafe.",
+      "action": "Visit the covered Lantern Arcade instead."
+    }
+  ]
+}
+
