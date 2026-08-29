@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "evidence-first-travel-planner"
+version = "0.1.0"
+description = "A deterministic, provenance-aware itinerary validator"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "sean-from-japan"}]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "mypy==1.17.1",
+  "pytest==8.4.2",
+  "ruff==0.12.11",
+]
+
+[project.scripts]
+evidence-travel = "evidence_travel.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = [
+  "E501",   # URLs, diagnostics, and embedded static HTML are intentionally atomic.
+  "UP006",  # typing aliases keep the annotations importable on Python 3.9.
+  "UP035",  # collections.abc generics vary across the supported Python range.
+  "UP045",  # PEP 604 union syntax is not parseable on Python 3.9.
+]
+
+[tool.mypy]
+python_version = "3.9"
+strict = true
+packages = ["evidence_travel"]

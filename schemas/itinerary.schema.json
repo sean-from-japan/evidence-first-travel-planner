@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/evidence-first-travel-planner/itinerary.schema.json",
+  "title": "Evidence-first itinerary",
+  "type": "object",
+  "required": ["schema_version", "metadata", "sources", "places", "activities", "reservations", "transfers", "fallback_plans"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "metadata": {
+      "type": "object",
+      "required": ["title", "timezone", "planning_as_of"],
+      "properties": {
+        "title": {"type": "string"},
+        "timezone": {"type": "string", "description": "IANA time-zone name"},
+        "planning_as_of": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+    "places": {"type": "array", "items": {"$ref": "#/$defs/place"}},
+    "activities": {"type": "array", "items": {"$ref": "#/$defs/activity"}},
+    "reservations": {"type": "array", "items": {"$ref": "#/$defs/reservation"}},
+    "transfers": {"type": "array", "items": {"$ref": "#/$defs/transfer"}},
+    "fallback_plans": {"type": "array", "items": {"$ref": "#/$defs/fallback"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "source_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+    "source": {
+      "type": "object",
+      "required": ["id", "reference", "publisher", "type", "checked_at", "freshness_days", "verification_status", "confidence", "facts"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "reference": {"type": "string"}, "url": {"type": "string", "format": "uri"},
+        "publisher": {"type": "string"}, "type": {"type": "string"}, "checked_at": {"type": "string", "format": "date-time"},
+        "freshness_days": {"type": "integer", "minimum": 0},
+        "verification_status": {"enum": ["verified", "needs_resolution", "unverified"]},
+        "confidence": {"enum": ["high", "medium", "low", "unknown"]},
+        "facts": {"type": "array", "items": {"type": "object", "required": ["subject", "field", "value"], "properties": {"subject": {"type": "string"}, "field": {"type": "string"}, "value": {"type": ["string", "number", "boolean"]}}, "additionalProperties": false}}
+      },
+      "additionalProperties": false
+    },
+    "place": {
+      "type": "object", "required": ["id", "name", "lat", "lon"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "name": {"type": "string"}, "lat": {"type": "number", "minimum": -90, "maximum": 90}, "lon": {"type": "number", "minimum": -180, "maximum": 180}},
+      "additionalProperties": false
+    },
+    "activity": {
+      "type": "object", "required": ["id", "name", "place_id", "start", "end", "required", "booking_required", "fragile", "source_ids"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "name": {"type": "string"}, "place_id": {"$ref": "#/$defs/id"},
+        "start": {"type": "string", "format": "date-time"}, "end": {"type": "string", "format": "date-time"},
+        "required": {"type": "boolean"}, "booking_required": {"type": "boolean"}, "reservation_id": {"$ref": "#/$defs/id"},
+        "fragile": {"type": "boolean"}, "fallback_plan_id": {"$ref": "#/$defs/id"}, "source_ids": {"$ref": "#/$defs/source_ids"},
+        "closures": {"type": "array", "items": {"type": "string", "format": "date"}},
+        "opening_windows": {"type": "array", "items": {"type": "object", "required": ["days", "opens", "closes"], "properties": {"days": {"type": "array", "items": {"enum": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}}, "opens": {"type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$"}, "closes": {"type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$"}}, "additionalProperties": false}}
+      },
+      "additionalProperties": false
+    },
+    "reservation": {
+      "type": "object", "required": ["id", "activity_id", "start", "end", "booked", "deadline", "cancellation_constraints", "source_ids"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "activity_id": {"$ref": "#/$defs/id"}, "start": {"type": "string", "format": "date-time"}, "end": {"type": "string", "format": "date-time"}, "booked": {"type": "boolean"}, "deadline": {"type": "string", "format": "date-time"}, "cancellation_constraints": {"type": "string"}, "source_ids": {"$ref": "#/$defs/source_ids"}},
+      "additionalProperties": false
+    },
+    "transfer": {
+      "type": "object", "required": ["id", "from_activity_id", "to_activity_id", "depart_after", "arrive_by", "duration_minutes", "minimum_connection_minutes", "distance_km", "mode", "source_ids"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "from_activity_id": {"$ref": "#/$defs/id"}, "to_activity_id": {"$ref": "#/$defs/id"}, "depart_after": {"type": "string", "format": "date-time"}, "arrive_by": {"type": "string", "format": "date-time"}, "duration_minutes": {"type": "integer", "minimum": 0}, "minimum_connection_minutes": {"type": "integer", "minimum": 0}, "distance_km": {"type": "number", "minimum": 0}, "mode": {"type": "string"}, "source_ids": {"$ref": "#/$defs/source_ids"}},
+      "additionalProperties": false
+    },
+    "fallback": {
+      "type": "object", "required": ["id", "for_activity_id", "activation_condition", "action"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "for_activity_id": {"$ref": "#/$defs/id"}, "activation_condition": {"type": "string"}, "action": {"type": "string"}},
+      "additionalProperties": false
+    }
+  }
+}
+
