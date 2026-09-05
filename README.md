@@ -1,5 +1,7 @@
 # Evidence-First Travel Planner
 
+**English** | [日本語概要](README.ja.md)
+
 [![CI](https://github.com/sean-from-japan/evidence-first-travel-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/sean-from-japan/evidence-first-travel-planner/actions/workflows/ci.yml)
 
 Travel research becomes fragile when facts lose their provenance and opening times, bookings, transfers, and fallback conditions are checked only mentally. Evidence-First Travel Planner is a deterministic Python CLI that keeps those facts attached to their sources and turns contradictions into explainable findings.
